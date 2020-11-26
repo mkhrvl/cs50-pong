@@ -6,4 +6,4 @@ Recreation of Pong in LÖVE engine provided by Harvard's CS50's Introduction to 
 
 URL: https://cs50.harvard.edu/games/2018/assignments/0/
 
-Code located at line 253 in main.lua file.
+Code located at line 256 in main.lua file.
