@@ -49,6 +49,10 @@ VIRTUAL_HEIGHT = 243
 
 -- paddle movement speed
 PADDLE_SPEED = 200
+
+-- AI paddle speed, change to raise difficulty
+AI_SPEED = 200
+
 --[[
     Called just once at the beginning of the game; used to set up
     game objects, variables, etc. and prepare the game world.
@@ -251,33 +255,31 @@ function love.update(dt)
 
     -- AI Implementation
     if gameState == 'play' then
-        --player 1 AI with decceleration
+        -- player 1 AI 
         if ball.dx < 0 then
-            if player1.y + 10 <= ball.y + 2 then
-                player1.dy = PADDLE_SPEED
-                if ball.x < VIRTUAL_WIDTH / 4 then
-                    player1.dy = PADDLE_SPEED * 0.5
-                    if player1.dy < 100 then
-                        player1.dy = 100
-                    end
-                end
+            -- just to avoid paddles from shaking too much when the ball is approaching
+            if ball.y >= player1.y + 5 and ball.y + 4 <= player1.y + 15 then
+                player1.dy = 0
             else
-                player1.dy = -PADDLE_SPEED
-                if ball.x < VIRTUAL_WIDTH / 4 then
-                    player1.dy = -PADDLE_SPEED * 0.5
-                    if player1.dy > -100 then
-                        player1.dy = -100
-                    end
+                -- if the central region of the paddle is below the ball move paddle upwards
+                if player1.y + 5 > ball.y then
+                    player1.dy = -AI_SPEED -- constant defined in line 54
+                -- +12 takes account for the ball size
+                elseif player1.y + 12 < ball.y + 4 then
+                    player1.dy = AI_SPEED
                 end
             end
-        end
-        
-        --player 2 AI
-        if ball.dx > 0 then
-            if player2.y + 10 <= ball.y + 2 then
-                player2.dy = PADDLE_SPEED
+
+        -- player 2 AI
+        else
+            if ball.y >= player2.y + 5 and ball.y + 4 <= player2.y + 15 then
+                player2.dy = 0
             else
-                player2.dy = -PADDLE_SPEED
+                if player2.y + 5 > ball.y then
+                    player2.dy = -AI_SPEED
+                elseif player2.y + 12 < ball.y + 4 then
+                    player2.dy = AI_SPEED
+                end
             end
         end
     end
